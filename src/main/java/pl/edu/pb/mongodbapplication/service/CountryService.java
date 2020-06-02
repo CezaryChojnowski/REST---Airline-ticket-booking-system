@@ -40,5 +40,29 @@ public class CountryService {
         return countryDTOList;
     }
 
+    public Set<CountryDTO> findAllCountriesToWhichPlanesDepartFromAgivenCity(String country, String city) {
+        List<Flight> flightList = flightService.findAllFlights();
+        Set<CountryDTO> countryList = new HashSet<>();
+        for(int i=0; i<flightList.size(); i++) {
+            if (flightList.get(i).getAirPortFrom().getCountry().equals(country)) {
+                Set<CityDTO> citiesSet = new HashSet<>();
+                String countryName = flightList.get(i).getAirPortTo().getCountry();
+                for(int j=0; j<flightList.size(); j++){
+                    if(flightList.get(j).getAirPortTo().getCountry().equals(countryName) && flightList.get(j).getAirPortFrom().getCity().equals(city)) {
+                        String cityName = flightList.get(j).getAirPortTo().getCity();
+                        CityDTO cityDTO = new CityDTO(cityName);
+                        citiesSet.add(cityDTO);
+                    }
+                }
+                if(citiesSet.isEmpty()){
+                    continue;
+                }
+                CountryDTO countryDTO = new CountryDTO(countryName, citiesSet);
+                countryList.add(countryDTO);
+            }
+        }
+        return countryList;
+    }
+
 
 }
