@@ -25,7 +25,7 @@ public class FlightController {
         this.flightService = flightService;
         this.countryService = countryService;
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public List<Flight> findAllFlights(){
         return flightService.findAllFlights();
