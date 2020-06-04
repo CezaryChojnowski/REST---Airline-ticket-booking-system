@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Airport {
+public class AirPort {
     private String country;
     private String city;
     private String airPortName;

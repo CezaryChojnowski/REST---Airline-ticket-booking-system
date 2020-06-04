@@ -5,18 +5,16 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-
 @Setter
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@Document(collection = "Flight")
+@Document(collection = "Roles")
 @ToString
-public class Flight {
+public class Role {
     @Id
-    private Object _id;
-    private String date;
-    private AirPort airPortFrom;
-    private AirPort airPortTo;
+    private String id;
+
+    private ERole name;
 }
