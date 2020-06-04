@@ -21,4 +21,8 @@ public class FlightService {
         return flightRepository.findAll();
     }
 
+    public List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, String date ){
+        return flightRepository.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
+    }
+
 }

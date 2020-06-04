@@ -2,6 +2,7 @@ package pl.edu.pb.mongodbapplication.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,13 +23,17 @@ public class CountryController {
         this.countryService = countryService;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/departingPlanes", method = RequestMethod.GET)
     public Set<CountryDTO> findAllTheCountriesThatPlanesDepartFrom(){
         return countryService.findAllTheCountriesThatPlanesDepartFrom();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/airplanesArriving", method = RequestMethod.GET)
-    public Set<CountryDTO> findAllCountriesToWhichPlanesDepartFromAgivenCity(@RequestParam(required = true) String Country, @RequestParam(required = true) String City){
+    public Set<CountryDTO> findAllCountriesToWhichPlanesDepartFromAgivenCity(
+            @RequestParam String Country,
+            @RequestParam String City){
         return countryService.findAllCountriesToWhichPlanesDepartFromAgivenCity(Country, City);
     }
 }
