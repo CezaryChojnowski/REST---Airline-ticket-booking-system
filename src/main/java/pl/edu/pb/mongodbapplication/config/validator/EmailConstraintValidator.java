@@ -13,6 +13,6 @@ public class EmailConstraintValidator implements ConstraintValidator<ValidEmail,
     @Override
     public boolean isValid(String contactField,
                            ConstraintValidatorContext cxt) {
-        return contactField != null && contactField.matches("[A-Za-z0-9]+@[A-Za-z0-9]+[.]+[A-Za-z]{2,4}");
+        return contactField != null && contactField.matches("[A-Za-z0-9.]+@[A-Za-z0-9]+[.]+[A-Za-z]{2,4}");
     }
 }

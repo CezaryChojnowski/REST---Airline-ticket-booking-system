@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pl.edu.pb.mongodbapplication.config.validator.ValidEmail;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -26,12 +27,11 @@ public class User {
     @NotEmpty(message = "{user.lastName.notEmpty}")
     private String lastName;
     @NotEmpty(message = "{user.email.notEmpty}")
+    @ValidEmail
     private String email;
     @NotEmpty(message = "{user.username.notEmpty}")
     private String username;
     @NotEmpty(message = "{user.password.notEmpty}")
-    @NotEmpty(message = "{user.password.notEmpty}")
-    @NotBlank(message = "{user.password.notEmpty}")
     private String password;
     @DBRef
     private Set<Role> roles = new HashSet<>();
