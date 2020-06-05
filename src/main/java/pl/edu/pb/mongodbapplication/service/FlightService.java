@@ -2,6 +2,7 @@ package pl.edu.pb.mongodbapplication.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pb.mongodbapplication.config.error.NoFlightsBetweenTheseCitiesOnThisDayException;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.repository.FlightRepository;
 
@@ -21,8 +22,24 @@ public class FlightService {
         return flightRepository.findAll();
     }
 
-    public List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, String date ){
-        return flightRepository.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
+    public List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, String date){
+        List<Flight> flights = flightRepository.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
+        if(!flights.isEmpty()){
+            return flights;
+        }
+        else{
+            throw new NoFlightsBetweenTheseCitiesOnThisDayException("No flights between:" +
+                    countryFrom +
+                    ", " +
+                    cityFrom +
+                    " - " +
+                    countryTo +
+                    ", " +
+                    cityTo +
+                    " on " +
+                    date);
+        }
+
     }
 
 }
