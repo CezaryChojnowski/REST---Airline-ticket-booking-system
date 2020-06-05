@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import pl.edu.pb.mongodbapplication.config.error.response.AccessDeniedResponse;
-import pl.edu.pb.mongodbapplication.config.error.response.AuthenticationResponse;
+import pl.edu.pb.mongodbapplication.config.error.response.*;
 
 import org.springframework.security.access.AccessDeniedException;
-import pl.edu.pb.mongodbapplication.config.error.response.MissingServletRequestParameterResponse;
-import pl.edu.pb.mongodbapplication.config.error.response.NoFlightsBetweenTheseCitiesOnThisDayResponse;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +36,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Value("${missingParameter}")
     private String missingParameter;
+
+    @Value("${validationFailed}")
+    private String validationFailed;
 
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
@@ -71,5 +73,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         MissingServletRequestParameterResponse error = new MissingServletRequestParameterResponse(missingParameter, details, HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<Object>(
                 error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ ConstraintViolationException.class })
+    public ResponseEntity handleConstraintViolation(
+            ConstraintViolationException ex) {
+        List<String> details = new ArrayList<>();
+        for (ConstraintViolation<?> error : ex.getConstraintViolations()) {
+            details.add(error.getMessage());
+        }
+        ConstraintViolationResponse constraintViolationResponse =
+                new ConstraintViolationResponse(validationFailed ,details, HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<Object>(constraintViolationResponse, HttpStatus.BAD_REQUEST);
     }
 }
