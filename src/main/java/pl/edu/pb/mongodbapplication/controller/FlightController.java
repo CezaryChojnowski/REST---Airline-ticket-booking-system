@@ -41,6 +41,4 @@ public class FlightController {
             @RequestParam String date){
         return flightService.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
     }
-
-
 }
