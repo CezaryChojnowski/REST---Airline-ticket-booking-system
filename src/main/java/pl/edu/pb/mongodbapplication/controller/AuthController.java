@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pb.mongodbapplication.config.jwt.JwtUtils;
 import pl.edu.pb.mongodbapplication.config.services.UserDetailsImpl;
 import pl.edu.pb.mongodbapplication.model.ERole;
-import pl.edu.pb.mongodbapplication.model.Role;
+import pl.edu.pb.mongodbapplication.model.Roles;
 import pl.edu.pb.mongodbapplication.model.User;
 import pl.edu.pb.mongodbapplication.payload.request.LoginRequest;
 import pl.edu.pb.mongodbapplication.payload.request.SignupRequest;
@@ -100,8 +100,8 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+        Set<Roles> roles = new HashSet<>();
+        Roles userRole = roleRepository.findByName(ERole.ROLE_USER)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         roles.add(userRole);
 

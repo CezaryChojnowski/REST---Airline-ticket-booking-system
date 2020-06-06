@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode
 @Document(collection = "Roles")
 @ToString
-public class Role {
+public class Roles {
     @Id
     private String id;
 

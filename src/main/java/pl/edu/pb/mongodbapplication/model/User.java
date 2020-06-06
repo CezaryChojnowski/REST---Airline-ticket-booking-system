@@ -32,9 +32,9 @@ public class User {
     @NotEmpty(message = "{user.password.notEmpty}")
     private String password;
     @DBRef
-    private Set<Role> roles = new HashSet<>();
+    private Set<Roles> roles = new HashSet<>();
 
-    public User(String firstName, String lastName, String username, String email, String password, Set<Role> roles) {
+    public User(String firstName, String lastName, String username, String email, String password, Set<Roles> roles) {
         this.firstName=firstName;
         this.lastName=lastName;
         this.username = username;
