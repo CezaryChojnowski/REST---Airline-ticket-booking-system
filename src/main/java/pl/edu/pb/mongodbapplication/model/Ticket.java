@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Set;
+import java.util.Comparator;
 
 @Getter
 @Setter
@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Document(collection = "Ticket")
-public class Ticket {
+public class Ticket implements Comparator<Ticket> {
     private String _id;
     @DBRef
     private Flight flight;
@@ -25,5 +25,10 @@ public class Ticket {
         this.flight=flight;
         this.user=user;
         this.code=code;
+    }
+
+    @Override
+    public int compare(Ticket o1, Ticket o2) {
+        return o2.getFlight().getDate().compareTo(o1.getFlight().getDate());
     }
 }
