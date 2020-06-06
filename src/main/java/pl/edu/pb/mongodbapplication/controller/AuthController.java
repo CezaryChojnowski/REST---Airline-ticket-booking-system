@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -118,6 +117,27 @@ public class AuthController {
                     .badRequest()
                     .body(new MessageResponse("The password can not be empty"));
         }
+
+        user.setPassword(encoder.encode(user.getPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @PostMapping("/signupAdmin")
+    public ResponseEntity<?> registerAdmin(@RequestBody SignupRequest signUpRequest) {
+        Set<Roles> roles = new HashSet<>();
+        Roles userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(userRole);
+
+        User user = new User(
+                signUpRequest.getFirstName(),
+                signUpRequest.getLastName(),
+                signUpRequest.getUsername(),
+                signUpRequest.getEmail(),
+                signUpRequest.getPassword(),
+                roles);
 
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
