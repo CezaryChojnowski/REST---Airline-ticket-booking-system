@@ -22,7 +22,7 @@ public class TicketController {
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity bookingFlight(@RequestBody Flight flight){
-            ticketService.bookFlight(flight);
+            ticketService.bookingFlight(flight);
         return ResponseEntity.ok(new MessageResponse("Flight booking completed successfully!"));
     }
 

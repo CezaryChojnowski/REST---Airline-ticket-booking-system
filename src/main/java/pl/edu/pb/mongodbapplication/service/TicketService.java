@@ -28,7 +28,7 @@ public class TicketService {
         this.userRepository = userRepository;
     }
 
-    public Ticket bookFlight(Flight flight){
+    public Ticket bookingFlight(Flight flight){
         Integer ticketCode = generateTicketCode();
         User user = getLoggedUser();
         Ticket ticket = new Ticket(flight, user, ticketCode);
