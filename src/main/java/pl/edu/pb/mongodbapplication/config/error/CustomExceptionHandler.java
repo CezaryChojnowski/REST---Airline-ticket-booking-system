@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pl.edu.pb.mongodbapplication.config.error.exception.*;
 import pl.edu.pb.mongodbapplication.config.error.response.*;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -44,6 +45,15 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Value("${reservationNotFound}")
     private String reservationNotFound;
+
+    @Value("${foundFlightFailed}")
+    private String foundFlightFailed;
+
+    @Value("${foundUserFailed}")
+    private String foundUserFailed;
+
+    @Value("${incorrectCode}")
+    private String incorrectCode;
 
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
@@ -125,6 +135,30 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         }
         MethodArgumentNotValidResponse methodArgumentNotValidResponse = new MethodArgumentNotValidResponse(validationFailed, details, HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<Object>(methodArgumentNotValidResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FlightNotFoundException.class)
+    public ResponseEntity<Object> handleFlightNotFoundException(FlightNotFoundException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        FlightNotFoundResponse error = new FlightNotFoundResponse(foundFlightFailed, details, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        UserNotFoundResponse error = new UserNotFoundResponse(foundUserFailed, details, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IncorrectTokenException.class)
+    public ResponseEntity<Object> handleIncorrectTokenException(IncorrectTokenException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        IncorrectTokenResponse error = new IncorrectTokenResponse(incorrectCode, details, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity(error, HttpStatus.NOT_FOUND);
     }
 
 }
