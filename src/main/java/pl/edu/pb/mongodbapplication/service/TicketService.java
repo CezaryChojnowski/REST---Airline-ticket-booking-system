@@ -1,6 +1,5 @@
 package pl.edu.pb.mongodbapplication.service;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +19,6 @@ import pl.edu.pb.mongodbapplication.repository.TicketRepository;
 import pl.edu.pb.mongodbapplication.repository.UserRepository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
@@ -30,9 +28,15 @@ public class TicketService {
 
     final UserRepository userRepository;
 
-    public TicketService(TicketRepository ticketRepository, UserRepository userRepository){
+    final FlightRepository flightRepository;
+
+    final EmailService emailService;
+
+    public TicketService(TicketRepository ticketRepository, UserRepository userRepository, FlightRepository flightRepository, EmailService emailService){
         this.ticketRepository = ticketRepository;
         this.userRepository = userRepository;
+        this.flightRepository = flightRepository;
+        this.emailService = emailService;
     }
 
     public Ticket bookingFlight(Flight flight){
@@ -80,6 +84,9 @@ public class TicketService {
 
     public List<TicketDTOForTicketsListByUser> findAllTicketsByUser(String username){
         Optional<User> user = userRepository.findByUsername(username);
+        if(!user.isPresent()){
+            throw new UserNotFoundException("User with username " + username + " not found");
+        }
         List<Ticket> tickets = ticketRepository.findAllByUser(user.get());
         tickets.sort(new Ticket());
         return getTicketsDTOByUser(tickets);

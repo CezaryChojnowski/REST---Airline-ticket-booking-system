@@ -31,6 +31,7 @@ public class User {
     private String username;
     @NotEmpty(message = "{user.password.notEmpty}")
     private String password;
+    private String token;
     @DBRef
     private Set<Roles> roles = new HashSet<>();
 
