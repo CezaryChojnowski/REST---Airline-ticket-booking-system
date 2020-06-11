@@ -36,4 +36,12 @@ public class TicketController {
         return ticketService.findAllTicketsByUser(username);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @RequestMapping(value = "/{code}",method = RequestMethod.GET)
+    public TicketDTO checkReservation(
+            @PathVariable("code") Integer code){
+        Ticket ticket = ticketService.checkReservation(code);
+        return ticketService.getCreatedTicketDTO(ticket);
+    }
+
 }
