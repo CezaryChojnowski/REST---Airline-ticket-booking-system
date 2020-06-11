@@ -11,6 +11,7 @@ import pl.edu.pb.mongodbapplication.service.FlightService;
 import pl.edu.pb.mongodbapplication.service.TicketService;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -50,6 +51,14 @@ public class FlightController {
             @RequestParam String countryTo,
             @RequestParam String cityTo,
             @RequestParam String date){
-        return flightService.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
+        LocalDate localDate = LocalDate.parse(date);
+        return flightService.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, localDate);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/{flightId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteFlight(@PathVariable("flightId") String flightId){
+        flightService.deleteFlight(flightId);
+        return ResponseEntity.ok(new MessageResponse("Flight deleting successfully!"));
     }
 }

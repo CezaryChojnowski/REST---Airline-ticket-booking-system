@@ -9,10 +9,13 @@ import org.springframework.stereotype.Service;
 import pl.edu.pb.mongodbapplication.DTO.TicketDTO;
 import pl.edu.pb.mongodbapplication.DTO.TicketDTOForTicketsListByUser;
 import pl.edu.pb.mongodbapplication.DTO.UserDTO;
-import pl.edu.pb.mongodbapplication.config.error.ReservationNotFoundException;
+import pl.edu.pb.mongodbapplication.config.error.exception.FlightNotFoundException;
+import pl.edu.pb.mongodbapplication.config.error.exception.ReservationNotFoundException;
+import pl.edu.pb.mongodbapplication.config.error.exception.UserNotFoundException;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.model.Ticket;
 import pl.edu.pb.mongodbapplication.model.User;
+import pl.edu.pb.mongodbapplication.repository.FlightRepository;
 import pl.edu.pb.mongodbapplication.repository.TicketRepository;
 import pl.edu.pb.mongodbapplication.repository.UserRepository;
 
@@ -88,6 +91,22 @@ public class TicketService {
             ticketDTOForTicketsListByUserList.add(new TicketDTOForTicketsListByUser(ticket.get_id(),ticket.getFlight(), ticket.getCode()));
         }
         return ticketDTOForTicketsListByUserList;
+    }
+
+    public void deleteTicketsByFlight(String flightId){
+        String email;
+        Optional<Flight> flight = flightRepository.findById(flightId);
+        if(!flight.isPresent()){
+            throw new FlightNotFoundException("Flight with id " + flightId + " not found");
+        }
+        List<Ticket> tickets = ticketRepository.findAllByFlight(flight.get());
+        if(!tickets.isEmpty()){
+            for (Ticket ticket : tickets) {
+                email = ticket.getUser().getEmail();
+                emailService.sendEmailToUsersWithInformationAboutTheCanceledFlight(email, flight.get());
+                ticketRepository.delete(ticket);
+            }
+        }
     }
 
 

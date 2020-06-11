@@ -2,14 +2,13 @@ package pl.edu.pb.mongodbapplication.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.edu.pb.mongodbapplication.config.error.InvalidDataException;
-import pl.edu.pb.mongodbapplication.config.error.NoFlightsBetweenTheseCitiesOnThisDayException;
+import pl.edu.pb.mongodbapplication.config.error.exception.InvalidDataException;
+import pl.edu.pb.mongodbapplication.config.error.exception.NoFlightsBetweenTheseCitiesOnThisDayException;
 import pl.edu.pb.mongodbapplication.model.AirPort;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.repository.FlightRepository;
 
-import javax.validation.ConstraintViolationException;
-import java.lang.reflect.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +17,19 @@ public class FlightService {
 
     private final FlightRepository flightRepository;
 
+    private final TicketService ticketService;
+
     @Autowired
-    public FlightService(FlightRepository flightRepository) {
+    public FlightService(FlightRepository flightRepository, TicketService ticketService) {
         this.flightRepository = flightRepository;
+        this.ticketService = ticketService;
     }
 
     public List<Flight> findAllFlights(){
         return flightRepository.findAll();
     }
 
-    public List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, String date){
+    public List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, LocalDate date){
         List<Flight> flights = flightRepository.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
         if(!flights.isEmpty()){
             return flights;
@@ -71,6 +73,11 @@ public class FlightService {
             booleanList.add(false);
         }
         return booleanList.contains(Boolean.FALSE);
+    }
+
+    public void deleteFlight(String flightId){
+        ticketService.deleteTicketsByFlight(flightId);
+        flightRepository.deleteById(flightId);
 
     }
 
