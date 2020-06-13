@@ -27,4 +27,6 @@ public class Flight {
     private AirPort airPortFrom;
     @NotNull(message = "{flight.airPorts}")
     private AirPort airPortTo;
+    @NotNull
+    private int price;
 }

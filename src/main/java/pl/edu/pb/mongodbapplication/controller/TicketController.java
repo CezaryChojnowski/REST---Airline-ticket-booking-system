@@ -8,9 +8,12 @@ import pl.edu.pb.mongodbapplication.DTO.TicketDTOForTicketsListByUser;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.model.Ticket;
 import pl.edu.pb.mongodbapplication.payload.response.MessageResponse;
+import pl.edu.pb.mongodbapplication.service.EmailService;
 import pl.edu.pb.mongodbapplication.service.TicketService;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,15 +22,21 @@ import java.util.List;
 public class TicketController {
     private final TicketService ticketService;
 
-    public TicketController(TicketService ticketService) {
+    private final EmailService emailService;
+
+    public TicketController(TicketService ticketService, EmailService emailService) {
         this.ticketService = ticketService;
+        this.emailService = emailService;
     }
 
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.POST)
-    public TicketDTO bookingFlight(@Valid @RequestBody Flight flight){
+    public TicketDTO bookingFlight(@Valid @RequestBody Flight flight) throws MessagingException, IOException {
         Ticket ticket = ticketService.bookingFlight(flight);
-        return ticketService.getCreatedTicketDTO(ticket);
+        TicketDTO ticketDTO = ticketService.getCreatedTicketDTO(ticket);
+        emailService.createTicketPDF(ticketDTO);
+        emailService.sendEmailWithReservation(ticketDTO);
+        return ticketDTO;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

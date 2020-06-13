@@ -12,4 +12,6 @@ public class AirPort {
     private String country;
     private String city;
     private String airPortName;
+    public String street;
+    public int numer_of_building;
 }

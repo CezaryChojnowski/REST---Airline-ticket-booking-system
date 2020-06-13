@@ -48,7 +48,7 @@ public class TicketService {
 
     public TicketDTO getCreatedTicketDTO(Ticket ticket){
         User user = ticket.getUser();
-        UserDTO userDTO = new UserDTO(user.getFirstName(), user.getLastName());
+        UserDTO userDTO = new UserDTO(user.getFirstName(), user.getLastName(), user.getEmail());
         return new TicketDTO(ticket.get_id(),ticket.getFlight(), userDTO, ticket.getCode());
     }
 
