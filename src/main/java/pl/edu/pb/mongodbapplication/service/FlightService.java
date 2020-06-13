@@ -72,9 +72,6 @@ public class FlightService {
         if(airport.getAirPortName()==null || airport.getAirPortName().isEmpty()){
             booleanList.add(false);
         }
-        if(airport.getStreet()==null || airport.getStreet().isEmpty()){
-            booleanList.add(false);
-        }
         return booleanList.contains(Boolean.FALSE);
     }
 
@@ -84,4 +81,7 @@ public class FlightService {
 
     }
 
+    public Flight getFlightById(String flightId) {
+        return flightRepository.findById(flightId).get();
+    }
 }

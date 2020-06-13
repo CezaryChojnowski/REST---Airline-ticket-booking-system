@@ -118,4 +118,8 @@ public class TicketService {
     public void deleteTicket(String ticketId) {
         ticketRepository.deleteById(ticketId);
     }
+
+    public Ticket getTicketById(String ticketId) {
+        return ticketRepository.findById(ticketId).get();
+    }
 }

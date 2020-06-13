@@ -61,4 +61,9 @@ public class TicketController {
         return ResponseEntity.ok(new MessageResponse("Ticket deleting successfully!"));
     }
 
+    @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
+    public Ticket getFlight(@PathVariable("ticketId") String ticketId){
+        return ticketService.getTicketById(ticketId);
+    }
+
 }

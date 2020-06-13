@@ -66,9 +66,9 @@ public class EmailService {
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
             document.add(new Paragraph().add("Origin: " + ticket.getFlight().getAirPortFrom().getCountry() + ", " + ticket.getFlight().getAirPortFrom().getCity()));
-            document.add(new Paragraph().add("Departure airport: " + ticket.getFlight().getAirPortFrom().getAirPortName() + ", " + ticket.getFlight().getAirPortFrom().getStreet() + " " + ticket.getFlight().getAirPortFrom().getNumer_of_building() + "\n\n"));
+            document.add(new Paragraph().add("Departure airport: " + ticket.getFlight().getAirPortFrom().getAirPortName() + "\n\n"));
             document.add(new Paragraph().add("Destination: " + ticket.getFlight().getAirPortTo().getCountry() + ", " + ticket.getFlight().getAirPortTo().getCity()));
-            document.add(new Paragraph().add("Destination airport: " + ticket.getFlight().getAirPortTo().getAirPortName() + ", " + ticket.getFlight().getAirPortTo().getStreet() + " " + ticket.getFlight().getAirPortTo().getNumer_of_building() + "\n\n"));
+            document.add(new Paragraph().add("Destination airport: " + ticket.getFlight().getAirPortTo().getAirPortName() +"\n\n"));
             document.add(new Paragraph().add("Flight date: " + ticket.getFlight().getDate()));
             document.add(new Paragraph().add("Flight time: " + ticket.getFlight().getTime()));
             document.add(new Paragraph().add("Flight price: " + ticket.getFlight().getPrice() + "\n\n\n"));

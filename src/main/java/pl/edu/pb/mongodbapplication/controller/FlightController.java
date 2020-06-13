@@ -61,4 +61,17 @@ public class FlightController {
         flightService.deleteFlight(flightId);
         return ResponseEntity.ok(new MessageResponse("Flight deleting successfully!"));
     }
+    @RequestMapping(value = "/{flightId}", method = RequestMethod.GET)
+    public Flight getFlight(@PathVariable("flightId") String flightId){
+        return flightService.getFlightById(flightId);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/list" ,method = RequestMethod.POST)
+    public ResponseEntity createFlights(@Valid @RequestBody List<Flight> flights){
+        for(int i=0; i<flights.size(); i++){
+            flightService.createFlight(flights.get(i));
+        }
+        return ResponseEntity.ok(new MessageResponse("Flights creating successfully!"));
+    }
 }
