@@ -1,5 +1,5 @@
 package pl.edu.pb.mongodbapplication.controller;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +7,7 @@ import pl.edu.pb.mongodbapplication.DTO.TicketDTO;
 import pl.edu.pb.mongodbapplication.DTO.TicketDTOForTicketsListByUser;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.model.Ticket;
+import pl.edu.pb.mongodbapplication.payload.response.MessageResponse;
 import pl.edu.pb.mongodbapplication.service.TicketService;
 
 import javax.validation.Valid;
@@ -42,6 +43,13 @@ public class TicketController {
             @PathVariable("code") Integer code){
         Ticket ticket = ticketService.checkReservation(code);
         return ticketService.getCreatedTicketDTO(ticket);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/{ticketId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteTicket(@PathVariable("ticketId") String ticketId){
+        ticketService.deleteTicket(ticketId);
+        return ResponseEntity.ok(new MessageResponse("Ticket deleting successfully!"));
     }
 
 }

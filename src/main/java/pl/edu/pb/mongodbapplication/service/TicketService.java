@@ -115,6 +115,7 @@ public class TicketService {
             }
         }
     }
-
-
+    public void deleteTicket(String ticketId) {
+        ticketRepository.deleteById(ticketId);
+    }
 }
