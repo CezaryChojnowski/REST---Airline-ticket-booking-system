@@ -23,4 +23,8 @@ public class AirPortService {
     public List<AirPort> getAllAirPorts() {
         return airPortRepository.findAll();
     }
+
+    public AirPort findByCountryAndCity(String country, String city){
+        return airPortRepository.findAirPortByCountryAndCity(country, city);
+    }
 }

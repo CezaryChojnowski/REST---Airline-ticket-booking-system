@@ -5,4 +5,6 @@ import pl.edu.pb.mongodbapplication.model.AirPort;
 import pl.edu.pb.mongodbapplication.model.Flight;
 
 public interface AirPortRepository extends MongoRepository<AirPort, String> {
+
+    public AirPort findAirPortByCountryAndCity(String Country, String City);
 }
