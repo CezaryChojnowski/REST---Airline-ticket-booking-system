@@ -19,13 +19,11 @@ public class FlightService {
 
     private final TicketService ticketService;
 
-    private final AirPortService airPortService;
 
     @Autowired
-    public FlightService(FlightRepository flightRepository, TicketService ticketService, AirPortService airPortService) {
+    public FlightService(FlightRepository flightRepository, TicketService ticketService) {
         this.flightRepository = flightRepository;
         this.ticketService = ticketService;
-        this.airPortService = airPortService;
     }
 
     public List<Flight> findAllFlights(){
@@ -33,10 +31,7 @@ public class FlightService {
     }
 
     public List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, LocalDate date){
-        AirPort airPortFrom = airPortService.findByCountryAndCity(countryFrom, cityFrom);
-        AirPort airPortTo = airPortService.findByCountryAndCity(countryTo,cityTo);
-        List<Flight> flights = flightRepository.findFlightByAirPortFromAndAirPortToAndDate(airPortFrom, airPortTo, date);
-//        List<Flight> flights = flightRepository.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
+        List<Flight> flights = flightRepository.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
         if(!flights.isEmpty()){
             return flights;
         }

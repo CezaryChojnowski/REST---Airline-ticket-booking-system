@@ -2,6 +2,7 @@ package pl.edu.pb.mongodbapplication.model;
 
 import lombok.*;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,10 +26,8 @@ public class Flight {
     @NotNull(message = "{flight.time}")
     private LocalTime time;
     @NotNull(message = "{flight.airPorts}")
-    @DBRef
     private AirPort airPortFrom;
     @NotNull(message = "{flight.airPorts}")
-    @DBRef
     private AirPort airPortTo;
     @NotNull
     private int price;

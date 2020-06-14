@@ -18,8 +18,6 @@ public interface FlightRepository extends MongoRepository<Flight, String> {
     @Query("{'airPortFrom.country': ?0, 'airPortFrom.city':?1, 'airPortTo.country' : ?2, 'airPortTo.city' : ?3, 'date': ?4}")
     List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, LocalDate date);
 
-    List<Flight> findFlightByAirPortFromAndAirPortToAndDate(AirPort airPortFrom, AirPort airPortTo, LocalDate date);
-
     @Query("{ '_id': ?0 }")
     Flight findById(ObjectId id);
 }

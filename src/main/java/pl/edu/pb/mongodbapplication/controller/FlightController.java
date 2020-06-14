@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pb.mongodbapplication.model.AirPort;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.payload.response.MessageResponse;
-import pl.edu.pb.mongodbapplication.service.AirPortService;
 import pl.edu.pb.mongodbapplication.service.CountryService;
 import pl.edu.pb.mongodbapplication.service.FlightService;
 import pl.edu.pb.mongodbapplication.service.TicketService;
@@ -26,14 +24,12 @@ public class FlightController {
 
     private final CountryService countryService;
 
-    private final AirPortService airPortService;
 
     @Autowired
-    public FlightController(FlightService flightService, TicketService ticketService, CountryService countryService, AirPortService airPortService) {
+    public FlightController(FlightService flightService, TicketService ticketService, CountryService countryService) {
         this.flightService = flightService;
         this.ticketService = ticketService;
         this.countryService = countryService;
-        this.airPortService = airPortService;
     }
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)

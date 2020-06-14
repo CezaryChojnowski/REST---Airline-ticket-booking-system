@@ -15,4 +15,10 @@ public class AirPort {
     private String country;
     private String city;
     private String airPortName;
+
+    public AirPort(String country, String city, String airPortName) {
+        this.country=country;
+        this.city=city;
+        this.airPortName=airPortName;
+    }
 }
