@@ -108,7 +108,7 @@ public class EmailService {
             textBodyPart.setText("Your flight from " + ticket.getFlight().getAirPortFrom().getCity() + " to " + ticket.getFlight().getAirPortTo().getCity() +
                 " on " + ticket.getFlight().getDate().toString() + " at " + ticket.getFlight().getTime().toString() + " is successfully booking \nConfirmation of reservation is in attachment");
             MimeBodyPart pdfAttachment = new MimeBodyPart();
-            pdfAttachment.attachFile("E:\\Javka\\mongodbapplication\\Ticket "+ticket.getCode()+".pdf");
+            pdfAttachment.attachFile("Ticket " + ticket.getCode()+".pdf");
 
             emailContent.addBodyPart(textBodyPart);
             emailContent.addBodyPart(pdfAttachment);
