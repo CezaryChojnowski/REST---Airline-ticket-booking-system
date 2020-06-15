@@ -20,4 +20,6 @@ public interface FlightRepository extends MongoRepository<Flight, String> {
 
     @Query("{ '_id': ?0 }")
     Flight findById(ObjectId id);
+    @Query("{'date': ?0}")
+    List<Flight> findFlightByDate(LocalDate date);
 }

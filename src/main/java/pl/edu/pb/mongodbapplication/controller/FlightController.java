@@ -36,8 +36,11 @@ public class FlightController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Flight>> findAllFlights(){
-        List<Flight> flights = flightService.findAllFlights();
+    public ResponseEntity<List<Flight>> findAllFlights(
+            @RequestParam String date
+    ){
+        LocalDate localDate = LocalDate.parse(date);
+        List<Flight> flights = flightService.findAllFlightsByDate(localDate);
         for (Flight flight : flights) {
             String flightId = flight.get_id();
             Link selfLink = linkTo(FlightController.class).slash(flightId).withSelfRel();

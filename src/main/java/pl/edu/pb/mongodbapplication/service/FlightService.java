@@ -30,6 +30,10 @@ public class FlightService {
         return flightRepository.findAll();
     }
 
+    public List<Flight> findAllFlightsByDate(LocalDate localDate){
+        return flightRepository.findFlightByDate(localDate);
+    }
+
     public List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, LocalDate date){
         List<Flight> flights = flightRepository.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, date);
         if(!flights.isEmpty()){
