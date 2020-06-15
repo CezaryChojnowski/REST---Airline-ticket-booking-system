@@ -3,6 +3,7 @@ package pl.edu.pb.mongodbapplication.service;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.edu.pb.mongodbapplication.config.error.exception.ThePasswordCanNotBeEmptyException;
 import pl.edu.pb.mongodbapplication.config.error.exception.UserNotFoundException;
 import pl.edu.pb.mongodbapplication.model.User;
 import pl.edu.pb.mongodbapplication.repository.UserRepository;
@@ -60,6 +61,9 @@ public class UserService {
     }
 
     public void updatePassword(String password, String email){
+        if(password == null || password.isEmpty()){
+            throw new ThePasswordCanNotBeEmptyException("The password can not be empty");
+        }
         User user = findUserByEmail(email);
         user.setPassword(encoder.encode(password));
         userRepository.save(user);

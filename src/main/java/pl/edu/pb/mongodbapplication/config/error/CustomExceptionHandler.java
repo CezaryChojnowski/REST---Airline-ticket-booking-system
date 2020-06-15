@@ -58,10 +58,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @Value("${registrationFailed}")
     private String registrationFailed;
 
-
-
-
-
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
         List<String> details = new ArrayList<>();
