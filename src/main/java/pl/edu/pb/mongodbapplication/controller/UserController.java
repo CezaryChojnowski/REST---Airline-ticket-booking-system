@@ -21,7 +21,7 @@ public class UserController {
         this.emailService = emailService;
     }
 
-    @RequestMapping(value = "/sendEmail" ,method = RequestMethod.PATCH)
+    @RequestMapping(value = "/sendEmail" ,method = RequestMethod.POST)
     public ResponseEntity sendEmailToResetPassword(@RequestParam String email){
         User user = userService.setToken(email);
         emailService.sendEmailToResetPassword(email, user.getToken());
@@ -37,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok(new MessageResponse("The code is correct"));
     }
 
-    @RequestMapping(value = "/resetPassword" ,method = RequestMethod.PATCH)
+    @RequestMapping(value = "/resetPassword" ,method = RequestMethod.POST)
     public ResponseEntity resetPassword(@RequestParam String password, @RequestParam String email){
         userService.setToken(email);
         userService.updatePassword(password, email);
