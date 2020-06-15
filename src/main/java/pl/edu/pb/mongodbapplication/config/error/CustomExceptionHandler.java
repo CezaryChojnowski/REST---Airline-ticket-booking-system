@@ -55,6 +55,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @Value("${incorrectCode}")
     private String incorrectCode;
 
+    @Value("${registrationFailed}")
+    private String registrationFailed;
+
+
+
+
+
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
         List<String> details = new ArrayList<>();
@@ -160,5 +167,31 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         IncorrectTokenResponse error = new IncorrectTokenResponse(incorrectCode, details, HttpStatus.NOT_FOUND.value());
         return new ResponseEntity(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(UsernameIsAlreadyTakenException.class)
+    public ResponseEntity<Object> handleUsernameIsAlreadyTakenException(UsernameIsAlreadyTakenException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        UsernameIsAlreadyTakenResponse error = new UsernameIsAlreadyTakenResponse(registrationFailed, details, HttpStatus.CONFLICT.value());
+        return new ResponseEntity(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(EmailIsAlreadyTakenException.class)
+    public ResponseEntity<Object> handleEmailIsAlreadyTakenException(EmailIsAlreadyTakenException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        EmailIsAlreadyTakenResponse error = new EmailIsAlreadyTakenResponse(registrationFailed, details, HttpStatus.CONFLICT.value());
+        return new ResponseEntity(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ThePasswordCanNotBeEmptyException.class)
+    public ResponseEntity<Object> handleThePasswordCanNotBeEmptyException(ThePasswordCanNotBeEmptyException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        ThePasswordCanNotBeEmptyResponse error = new ThePasswordCanNotBeEmptyResponse(registrationFailed, details, HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.edu.pb.mongodbapplication.config.error.exception.ThePasswordCanNotBeEmptyException;
+import pl.edu.pb.mongodbapplication.config.error.exception.UsernameIsAlreadyTakenException;
 import pl.edu.pb.mongodbapplication.config.jwt.JwtUtils;
 import pl.edu.pb.mongodbapplication.config.services.UserDetailsImpl;
 import pl.edu.pb.mongodbapplication.model.ERole;
@@ -87,15 +89,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+            throw new UsernameIsAlreadyTakenException("Username is already taken");
         }
 
         if (userService.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+            throw new UsernameIsAlreadyTakenException("Email is already taken");
         }
 
         Set<Roles> roles = new HashSet<>();
@@ -112,9 +110,7 @@ public class AuthController {
                 roles);
 
         if(user.getPassword() == null || user.getPassword().isEmpty()){
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("The password can not be empty"));
+            throw new ThePasswordCanNotBeEmptyException("The password can not be empty");
         }
 
         user.setPassword(encoder.encode(user.getPassword()));

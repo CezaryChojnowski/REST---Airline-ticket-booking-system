@@ -3,6 +3,7 @@ package pl.edu.pb.mongodbapplication.model;
 import lombok.*;
 import org.springframework.context.annotation.PropertySource;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -23,6 +24,7 @@ import java.time.LocalTime;
 public class Flight extends RepresentationModel<Flight> {
     private String _id;
     @NotNull(message = "{flight.date}")
+    @Indexed
     private LocalDate date;
     @NotNull(message = "{flight.time}")
     private LocalTime time;
