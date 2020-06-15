@@ -3,7 +3,6 @@ package pl.edu.pb.mongodbapplication.DTO;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import pl.edu.pb.mongodbapplication.model.Flight;
-import pl.edu.pb.mongodbapplication.model.Ticket;
 
 @Setter
 @Getter

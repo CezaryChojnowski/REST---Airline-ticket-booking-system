@@ -28,8 +28,6 @@ public class FlightController {
     private final TicketService ticketService;
 
     private final CountryService countryService;
-
-
     @Autowired
     public FlightController(FlightService flightService, TicketService ticketService, CountryService countryService) {
         this.flightService = flightService;
@@ -47,8 +45,6 @@ public class FlightController {
         }
         return new ResponseEntity<>(flights, HttpStatus.OK);
     }
-
-
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
