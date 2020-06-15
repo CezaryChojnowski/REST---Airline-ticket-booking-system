@@ -47,7 +47,7 @@ public class TicketController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @RequestMapping(value = "/{code}",method = RequestMethod.GET)
+    @RequestMapping(value = "/reservation/{code}",method = RequestMethod.GET)
     public TicketDTO checkReservation(
             @PathVariable("code") Integer code){
         Ticket ticket = ticketService.checkReservation(code);
@@ -60,9 +60,9 @@ public class TicketController {
         ticketService.deleteTicket(ticketId);
         return ResponseEntity.ok(new MessageResponse("Ticket deleting successfully!"));
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
-    public Ticket getFlight(@PathVariable("ticketId") String ticketId){
+    public Ticket getTicket(@PathVariable("ticketId") String ticketId){
         return ticketService.getTicketById(ticketId);
     }
 

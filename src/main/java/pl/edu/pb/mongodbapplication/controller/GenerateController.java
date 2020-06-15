@@ -13,8 +13,6 @@ import pl.edu.pb.mongodbapplication.service.GenerateService;
 public class GenerateController {
 
     private final GenerateService generateService;
-
-
     public GenerateController(GenerateService generateService) {
         this.generateService = generateService;
     }

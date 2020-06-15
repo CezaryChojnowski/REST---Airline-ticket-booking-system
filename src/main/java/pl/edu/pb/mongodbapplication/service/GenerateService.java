@@ -15,19 +15,16 @@ import java.util.Random;
 @Service
 public class GenerateService {
 
-    private final AirPortService airPortService;
-
     private final FlightService flightService;
 
-    public GenerateService(AirPortService airPortService, FlightService flightService) {
-        this.airPortService = airPortService;
+    public GenerateService(FlightService flightService) {
         this.flightService = flightService;
     }
 
     public void generateFlight(){
         List<AirPort> airPorts = new ArrayList<>();
         airPorts.add(new AirPort("USA", "New York", "John F. Kennedy"));
-        airPorts.add(new AirPort("Italy", "Roma", "Rome-Ciampino"));
+        airPorts.add(new AirPort("USA", "Los Angeles", "Los Angeles International Airport"));
         airPorts.add(new AirPort("Poland", "Warsaw", "Chopin AirPort"));
         airPorts.add(new AirPort("Germany", "Berlin", "Berlin-Tempelhof AirPort"));
         airPorts.add(new AirPort("France", "Paris", "Paris-Roissy-Charles de Gaulle AirPort"));
@@ -35,10 +32,10 @@ public class GenerateService {
         airPorts.add(new AirPort("Portugal", "Lisbon", "Lisbon-Portela AirPort"));
         airPorts.add(new AirPort("Russia", "Moscow", "Moscow-Domodiedowo AirPort"));
         airPorts.add(new AirPort("United Arab Emirates", "Dubai", "Dubai International Airport"));
-        airPorts.add(new AirPort("Canada", "Richmond", "Vancouver Airport"));
+        airPorts.add(new AirPort("Poland", "Radom", "Radom AirPort"));
 
         LocalDate date = LocalDate.parse("2020-06-20", DateTimeFormatter.ISO_DATE);
-        LocalDate dateLimit = LocalDate.parse("2020-12-30", DateTimeFormatter.ISO_DATE);
+        LocalDate dateLimit = LocalDate.parse("2020-06-27", DateTimeFormatter.ISO_DATE);
         LocalTime time = LocalTime.parse("09:00", DateTimeFormatter.ISO_TIME);
         LocalTime timeLimit = LocalTime.parse("21:00", DateTimeFormatter.ISO_TIME);
         int lenght = airPorts.size();

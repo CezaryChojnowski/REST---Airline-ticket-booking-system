@@ -62,6 +62,8 @@ public class FlightController {
         flightService.deleteFlight(flightId);
         return ResponseEntity.ok(new MessageResponse("Flight deleting successfully!"));
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{flightId}", method = RequestMethod.GET)
     public Flight getFlight(@PathVariable("flightId") String flightId){
         return flightService.getFlightById(flightId);
