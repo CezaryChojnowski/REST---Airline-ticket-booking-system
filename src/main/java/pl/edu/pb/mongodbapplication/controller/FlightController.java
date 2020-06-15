@@ -1,6 +1,8 @@
 package pl.edu.pb.mongodbapplication.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,9 @@ import pl.edu.pb.mongodbapplication.service.TicketService;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 
 @RestController
 @RequestMapping("/flights")
@@ -33,9 +38,17 @@ public class FlightController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
-    public List<Flight> findAllFlights(){
-        return flightService.findAllFlights();
+    public ResponseEntity<List<Flight>> findAllFlights(){
+        List<Flight> flights = flightService.findAllFlights();
+        for (Flight flight : flights) {
+            String flightId = flight.get_id();
+            Link selfLink = linkTo(FlightController.class).slash(flightId).withSelfRel();
+            flight.add(selfLink);
+        }
+        return new ResponseEntity<>(flights, HttpStatus.OK);
     }
+
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)

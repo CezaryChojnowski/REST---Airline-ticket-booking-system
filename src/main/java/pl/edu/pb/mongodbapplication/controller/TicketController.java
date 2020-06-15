@@ -1,4 +1,6 @@
 package pl.edu.pb.mongodbapplication.controller;
+import org.springframework.hateoas.Link;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,8 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("/tickets")
@@ -41,9 +45,15 @@ public class TicketController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
-    public List<TicketDTOForTicketsListByUser> getAllTicketsByUserName(
+    public ResponseEntity<List<TicketDTOForTicketsListByUser>> getAllTicketsByUserName(
             @RequestParam String username){
-        return ticketService.findAllTicketsByUser(username);
+            List<TicketDTOForTicketsListByUser> ticketsListByUsers = ticketService.findAllTicketsByUser(username);
+                for (TicketDTOForTicketsListByUser ticket : ticketsListByUsers) {
+                    String ticketId = ticket.get_id();
+                    Link selfLink = linkTo(TicketController.class).slash(ticketId).withSelfRel();
+                    ticket.add(selfLink);
+                }
+                return new ResponseEntity<>(ticketsListByUsers, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -62,8 +72,8 @@ public class TicketController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
-    public Ticket getTicket(@PathVariable("ticketId") String ticketId){
-        return ticketService.getTicketById(ticketId);
+    public TicketDTO getTicket(@PathVariable("ticketId") String ticketId){
+        return ticketService.getCreatedTicketDTO(ticketService.getTicketById(ticketId));
     }
 
 }
