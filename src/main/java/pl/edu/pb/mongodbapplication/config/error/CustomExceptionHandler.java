@@ -58,6 +58,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @Value("${registrationFailed}")
     private String registrationFailed;
 
+    @Value("${foundTicketFailed}")
+    private String foundTicketFailed;
 
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
@@ -194,6 +196,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> details = new ArrayList<>();
         details.add(exception.getLocalizedMessage());
         NoFlightsOnThisDayResponse error = new NoFlightsOnThisDayResponse(noFlights, details, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TicketNotFoundException.class)
+    public ResponseEntity<Object> handleTicketNotFoundException(TicketNotFoundException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        TicketNotFoundResponse error = new TicketNotFoundResponse(foundTicketFailed, details, HttpStatus.NOT_FOUND.value());
         return new ResponseEntity(error, HttpStatus.NOT_FOUND);
     }
 

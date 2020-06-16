@@ -10,6 +10,7 @@ import pl.edu.pb.mongodbapplication.DTO.TicketDTOForTicketsListByUser;
 import pl.edu.pb.mongodbapplication.DTO.UserDTO;
 import pl.edu.pb.mongodbapplication.config.error.exception.FlightNotFoundException;
 import pl.edu.pb.mongodbapplication.config.error.exception.ReservationNotFoundException;
+import pl.edu.pb.mongodbapplication.config.error.exception.TicketNotFoundException;
 import pl.edu.pb.mongodbapplication.config.error.exception.UserNotFoundException;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.model.Ticket;
@@ -115,11 +116,15 @@ public class TicketService {
             }
         }
     }
-    public void deleteTicket(String ticketId) {
-        ticketRepository.deleteById(ticketId);
+    public void deleteTicket(String ticketId){
+            ticketRepository.deleteById(ticketId);
     }
 
     public Ticket getTicketById(String ticketId) {
-        return ticketRepository.findById(ticketId).get();
+        Optional<Ticket> ticket = ticketRepository.findById(ticketId);
+        if(!ticket.isPresent()){
+            throw new TicketNotFoundException("Ticket with " + ticketId + " id not found");
+        }
+        return ticket.get();
     }
 }
