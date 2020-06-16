@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pb.mongodbapplication.config.error.exception.InvalidDataException;
 import pl.edu.pb.mongodbapplication.config.error.exception.NoFlightsBetweenTheseCitiesOnThisDayException;
+import pl.edu.pb.mongodbapplication.config.error.exception.NoFlightsOnThisDayException;
 import pl.edu.pb.mongodbapplication.model.AirPort;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.repository.FlightRepository;
@@ -31,7 +32,11 @@ public class FlightService {
     }
 
     public List<Flight> findAllFlightsByDate(LocalDate localDate){
-        return flightRepository.findFlightByDate(localDate);
+        List<Flight> flights = flightRepository.findFlightByDate(localDate);
+        if(flights.isEmpty()){
+            throw new NoFlightsOnThisDayException("No flights on this day");
+        }
+        return flights;
     }
 
     public List<Flight> findFlightsByGivenTwoCountriesAndCitiesAndDate(String countryFrom, String cityFrom, String countryTo, String cityTo, LocalDate date){

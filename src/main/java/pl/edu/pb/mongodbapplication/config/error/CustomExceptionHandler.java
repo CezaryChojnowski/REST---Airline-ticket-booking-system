@@ -58,6 +58,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @Value("${registrationFailed}")
     private String registrationFailed;
 
+
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
         List<String> details = new ArrayList<>();
@@ -187,6 +188,15 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         ThePasswordCanNotBeEmptyResponse error = new ThePasswordCanNotBeEmptyResponse(registrationFailed, details, HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NoFlightsOnThisDayException.class)
+    public ResponseEntity<Object> handleNoFlightsOnThisDayException(NoFlightsOnThisDayException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        NoFlightsOnThisDayResponse error = new NoFlightsOnThisDayResponse(noFlights, details, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity(error, HttpStatus.NOT_FOUND);
+    }
+
 
 
 
