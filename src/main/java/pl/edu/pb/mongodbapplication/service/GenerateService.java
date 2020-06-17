@@ -23,19 +23,18 @@ public class GenerateService {
 
     public void generateFlight(){
         List<AirPort> airPorts = new ArrayList<>();
-        airPorts.add(new AirPort("USA", "New York", "John F. Kennedy"));
-        airPorts.add(new AirPort("USA", "Los Angeles", "Los Angeles International Airport"));
-        airPorts.add(new AirPort("Poland", "Warsaw", "Chopin AirPort"));
-        airPorts.add(new AirPort("Germany", "Berlin", "Berlin-Tempelhof AirPort"));
-        airPorts.add(new AirPort("France", "Paris", "Paris-Roissy-Charles de Gaulle AirPort"));
-        airPorts.add(new AirPort("Spain", "Madrid", "Madrid-Barajas AirPort"));
-        airPorts.add(new AirPort("Portugal", "Lisbon", "Lisbon-Portela AirPort"));
-        airPorts.add(new AirPort("Russia", "Moscow", "Moscow-Domodiedowo AirPort"));
-        airPorts.add(new AirPort("United Arab Emirates", "Dubai", "Dubai International Airport"));
-        airPorts.add(new AirPort("Poland", "Radom", "Radom AirPort"));
+        airPorts.add(new AirPort("Stany Zjednoczone", "Nowy Jork", "Nowy Jork-John F. Kennedy"));
+        airPorts.add(new AirPort("Stany Zjednoczone", "Los Angeles", "Port lotniczy Los Angeles"));
+        airPorts.add(new AirPort("Polska", "Warszawa", "Warszawa-Babice"));
+        airPorts.add(new AirPort("Niemcy", "Berlin", "Berlin-Tempelhof"));
+        airPorts.add(new AirPort("Francja", "Paryż", "Paryż-Roissy-Charles de Gaulle"));
+        airPorts.add(new AirPort("Hiszpania", "Madryt", "Madryt-Barajas"));
+        airPorts.add(new AirPort("Portugalia", "Lizbona", "Lizbona-Portela"));
+        airPorts.add(new AirPort("Rosja", "Moskwa", "Moskwa-Domodiedowo"));
+        airPorts.add(new AirPort("Zjednoczone Emiraty Arabskie", "Dubaj ", "Port lotniczy Dubaj "));
 
         LocalDate date = LocalDate.parse("2020-06-20", DateTimeFormatter.ISO_DATE);
-        LocalDate dateLimit = LocalDate.parse("2020-06-27", DateTimeFormatter.ISO_DATE);
+        LocalDate dateLimit = LocalDate.parse("2020-06-30", DateTimeFormatter.ISO_DATE);
         LocalTime time = LocalTime.parse("09:00", DateTimeFormatter.ISO_TIME);
         LocalTime timeLimit = LocalTime.parse("21:00", DateTimeFormatter.ISO_TIME);
         int lenght = airPorts.size();

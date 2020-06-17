@@ -82,4 +82,8 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public User getUserByUserName(String username){
+        return userRepository.findByUsername(username).get();
+    }
+
 }

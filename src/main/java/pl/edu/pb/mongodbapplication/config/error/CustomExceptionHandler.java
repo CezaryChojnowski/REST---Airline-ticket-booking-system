@@ -64,6 +64,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @Value("${thereAreTicketsForTheGivenFlight}")
     private String thereAreTicketsForTheGivenFlight;
 
+    @Value("${doNotHaveAccessToThisTicket}")
+    private String doNotHaveAccessToThisTicket;
+
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
         List<String> details = new ArrayList<>();
@@ -217,6 +220,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         details.add(exception.getLocalizedMessage());
         ThereAreTicketsForTheGivenFlightResponse error = new ThereAreTicketsForTheGivenFlightResponse(thereAreTicketsForTheGivenFlight, details, HttpStatus.NOT_FOUND.value());
         return new ResponseEntity(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DoNotHaveAccessToThisTicketException.class)
+    public ResponseEntity<Object> handleTDoNotHaveAccessToThisTicketException(DoNotHaveAccessToThisTicketException exception){
+        List<String> details = new ArrayList<>();
+        details.add(exception.getLocalizedMessage());
+        DoNotHaveAccessToThisTicketResponse error = new DoNotHaveAccessToThisTicketResponse(doNotHaveAccessToThisTicket, details, HttpStatus.UNAUTHORIZED.value());
+        return new ResponseEntity(error, HttpStatus.UNAUTHORIZED);
     }
 
 
