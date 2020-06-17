@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.pb.mongodbapplication.DTO.TicketDTO;
 import pl.edu.pb.mongodbapplication.DTO.TicketDTOForTicketsListByUser;
 import pl.edu.pb.mongodbapplication.DTO.UserDTO;
-import pl.edu.pb.mongodbapplication.config.error.exception.FlightNotFoundException;
-import pl.edu.pb.mongodbapplication.config.error.exception.ReservationNotFoundException;
-import pl.edu.pb.mongodbapplication.config.error.exception.TicketNotFoundException;
-import pl.edu.pb.mongodbapplication.config.error.exception.UserNotFoundException;
+import pl.edu.pb.mongodbapplication.config.error.exception.*;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.model.Ticket;
 import pl.edu.pb.mongodbapplication.model.User;
@@ -96,7 +93,6 @@ public class TicketService {
             throw new UserNotFoundException(env.getProperty("reservationWithGivenTicketCodeNotFound") + " " + username);
         }
         List<Ticket> tickets = ticketRepository.findAllByUser(user.get());
-        tickets.sort(new Ticket());
         return getTicketsDTOByUser(tickets);
     }
 
@@ -133,5 +129,17 @@ public class TicketService {
             throw new TicketNotFoundException(env.getProperty("ticketWithGivenTicketIdNotFound") + " " + ticketId);
         }
         return ticket.get();
+    }
+
+    public void checkIfThereAreTicketsForTheGivenFlight(String flightId){
+        Optional<Flight> flight = flightRepository.findById(flightId);
+        if(!flight.isPresent()){
+            throw new FlightNotFoundException(env.getProperty("flightWithGivenFlightIdNotFound") + " " + flightId);
+        }
+        List<Ticket> tickets = ticketRepository.findAllByFlight(flight.get());
+        boolean thereAreTicketsForTheGivenFlight = !tickets.isEmpty();
+        if(thereAreTicketsForTheGivenFlight){
+            throw new ThereAreTicketsForTheGivenFlightException(env.getProperty("thereAreTicketsForTheGivenFlight"));
+        }
     }
 }

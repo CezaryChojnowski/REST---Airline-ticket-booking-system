@@ -95,10 +95,19 @@ public class FlightService {
     public void deleteFlight(String flightId){
         ticketService.deleteTicketsByFlight(flightId);
         flightRepository.deleteById(flightId);
-
     }
 
     public Flight getFlightById(String flightId) {
         return flightRepository.findById(flightId).get();
+    }
+
+    public Flight editFlight(Flight flight, String flightId){
+        Flight flightResult = flightRepository.findById(flightId).get();
+        flightResult.setAirPortTo(flight.getAirPortTo());
+        flightResult.setAirPortFrom(flight.getAirPortFrom());
+        flightResult.setPrice(flight.getPrice());
+        flightResult.setTime(flight.getTime());
+        flightResult.setDate(flight.getDate());
+        return flightRepository.save(flightResult);
     }
 }

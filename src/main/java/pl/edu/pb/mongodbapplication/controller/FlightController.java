@@ -1,7 +1,6 @@
 package pl.edu.pb.mongodbapplication.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +14,6 @@ import pl.edu.pb.mongodbapplication.service.TicketService;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RestController
@@ -36,17 +33,12 @@ public class FlightController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Flight>> findAllFlights(
+    public List<Flight> findAllFlights(
             @RequestParam String date
     ){
         LocalDate localDate = LocalDate.parse(date);
         List<Flight> flights = flightService.findAllFlightsByDate(localDate);
-        for (Flight flight : flights) {
-            String flightId = flight.get_id();
-            Link selfLink = linkTo(FlightController.class).slash(flightId).withSelfRel();
-            flight.add(selfLink);
-        }
-        return new ResponseEntity<>(flights, HttpStatus.OK);
+        return flights;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -88,5 +80,21 @@ public class FlightController {
             flightService.createFlight(flights.get(i));
         }
         return ResponseEntity.ok(new MessageResponse("Flights creating successfully!"));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/{flightId}/tickets" ,method = RequestMethod.GET)
+    public ResponseEntity checkIfThereAreTicketsForTheGivenFlight(@PathVariable("flightId") String flightId){
+        ticketService.checkIfThereAreTicketsForTheGivenFlight(flightId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/{flightId}", method = RequestMethod.POST)
+    public ResponseEntity editFlight(@PathVariable("flightId") String flightId,
+                                     @Valid @RequestBody Flight flight){
+        return ResponseEntity.ok(
+                flightService.editFlight(flight, flightId)
+        );
     }
 }
