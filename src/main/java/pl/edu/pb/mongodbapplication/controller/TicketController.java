@@ -45,15 +45,10 @@ public class TicketController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<TicketDTOForTicketsListByUser>> getAllTicketsByUserName(
+    public List<TicketDTOForTicketsListByUser> getAllTicketsByUserName(
             @RequestParam String username){
             List<TicketDTOForTicketsListByUser> ticketsListByUsers = ticketService.findAllTicketsByUser(username);
-                for (TicketDTOForTicketsListByUser ticket : ticketsListByUsers) {
-                    String ticketId = ticket.get_id();
-                    Link selfLink = linkTo(TicketController.class).slash(ticketId).withSelfRel();
-                    ticket.add(selfLink);
-                }
-                return new ResponseEntity<>(ticketsListByUsers, HttpStatus.OK);
+                return ticketsListByUsers;
     }
 
     @PreAuthorize("hasRole('USER')")

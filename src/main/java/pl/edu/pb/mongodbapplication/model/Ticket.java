@@ -13,7 +13,7 @@ import java.util.Comparator;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Document(collection = "Ticket")
-public class Ticket implements Comparator<Ticket> {
+public class Ticket {
     private String _id;
     @DBRef
     private Flight flight;
@@ -25,10 +25,5 @@ public class Ticket implements Comparator<Ticket> {
         this.flight=flight;
         this.user=user;
         this.code=code;
-    }
-
-    @Override
-    public int compare(Ticket o1, Ticket o2) {
-        return o2.getFlight().getDate().compareTo(o1.getFlight().getDate());
     }
 }

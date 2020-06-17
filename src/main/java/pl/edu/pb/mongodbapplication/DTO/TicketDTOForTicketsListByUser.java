@@ -10,7 +10,7 @@ import pl.edu.pb.mongodbapplication.model.Flight;
 @ToString
 @AllArgsConstructor
 @EqualsAndHashCode
-public class TicketDTOForTicketsListByUser extends RepresentationModel<TicketDTOForTicketsListByUser> {
+public class TicketDTOForTicketsListByUser {
     private String _id;
     private Flight flight;
     private Integer code;
