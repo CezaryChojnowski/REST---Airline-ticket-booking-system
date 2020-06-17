@@ -1,6 +1,8 @@
 package pl.edu.pb.mongodbapplication.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.pb.mongodbapplication.config.error.exception.ThePasswordCanNotBeEmptyException;
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 
 @Service
+@PropertySource("classpath:PL.exception.messages.properties")
 public class UserService {
 
     final
@@ -20,9 +23,13 @@ public class UserService {
     final
     UserRepository userRepository;
 
-    public UserService(PasswordEncoder encoder, UserRepository userRepository) {
+    final
+    Environment env;
+
+    public UserService(PasswordEncoder encoder, UserRepository userRepository, Environment env) {
         this.encoder = encoder;
         this.userRepository = userRepository;
+        this.env = env;
     }
 
     public boolean existsByUsername(String username){
@@ -36,7 +43,7 @@ public class UserService {
     public User findUserByEmail(String email){
         Optional<User> user = userRepository.findUserByEmail(email);
         if(!user.isPresent()){
-            throw new UserNotFoundException("User with email " + email + " not found");
+            throw new UserNotFoundException(env.getProperty("userWithGivenEmailNotFound") + " " + email);
         }
         return user.get();
     }
@@ -62,7 +69,7 @@ public class UserService {
 
     public void updatePassword(String password, String email){
         if(password == null || password.isEmpty()){
-            throw new ThePasswordCanNotBeEmptyException("The password can not be empty");
+            throw new ThePasswordCanNotBeEmptyException(env.getProperty("passwordCanNotBeEmpty"));
         }
         User user = findUserByEmail(email);
         user.setPassword(encoder.encode(password));

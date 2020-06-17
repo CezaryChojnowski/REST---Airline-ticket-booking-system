@@ -1,5 +1,7 @@
 package pl.edu.pb.mongodbapplication.service;
 
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,7 @@ import pl.edu.pb.mongodbapplication.repository.UserRepository;
 import java.util.*;
 
 @Service
+@PropertySource("classpath:PL.exception.messages.properties")
 public class TicketService {
 
     final
@@ -33,11 +36,15 @@ public class TicketService {
 
     final EmailService emailService;
 
-    public TicketService(TicketRepository ticketRepository, UserRepository userRepository, FlightRepository flightRepository, EmailService emailService){
+    final
+    Environment env;
+
+    public TicketService(TicketRepository ticketRepository, UserRepository userRepository, FlightRepository flightRepository, EmailService emailService, Environment env){
         this.ticketRepository = ticketRepository;
         this.userRepository = userRepository;
         this.flightRepository = flightRepository;
         this.emailService = emailService;
+        this.env = env;
     }
 
     public Ticket bookingFlight(Flight flight){
@@ -78,7 +85,7 @@ public class TicketService {
         Optional<Ticket> ticket = ticketRepository.findTicketByCode(number_of_reservation);
         boolean ticketExists = ticket.isPresent();
         if(!ticketExists){
-            throw new ReservationNotFoundException("Reservation with ticket number "+ number_of_reservation +" not found");
+            throw new ReservationNotFoundException(env.getProperty("reservationWithGivenTicketCodeNotFound") + " " + number_of_reservation);
         }
         return ticket.get();
     }
@@ -86,7 +93,7 @@ public class TicketService {
     public List<TicketDTOForTicketsListByUser> findAllTicketsByUser(String username){
         Optional<User> user = userRepository.findByUsername(username);
         if(!user.isPresent()){
-            throw new UserNotFoundException("User with username " + username + " not found");
+            throw new UserNotFoundException(env.getProperty("reservationWithGivenTicketCodeNotFound") + " " + username);
         }
         List<Ticket> tickets = ticketRepository.findAllByUser(user.get());
         tickets.sort(new Ticket());
@@ -105,7 +112,7 @@ public class TicketService {
         String email;
         Optional<Flight> flight = flightRepository.findById(flightId);
         if(!flight.isPresent()){
-            throw new FlightNotFoundException("Flight with id " + flightId + " not found");
+            throw new FlightNotFoundException(env.getProperty("flightWithGivenFlightIdNotFound") + " " + flightId);
         }
         List<Ticket> tickets = ticketRepository.findAllByFlight(flight.get());
         if(!tickets.isEmpty()){
@@ -123,7 +130,7 @@ public class TicketService {
     public Ticket getTicketById(String ticketId) {
         Optional<Ticket> ticket = ticketRepository.findById(ticketId);
         if(!ticket.isPresent()){
-            throw new TicketNotFoundException("Ticket with " + ticketId + " id not found");
+            throw new TicketNotFoundException(env.getProperty("ticketWithGivenTicketIdNotFound") + " " + ticketId);
         }
         return ticket.get();
     }

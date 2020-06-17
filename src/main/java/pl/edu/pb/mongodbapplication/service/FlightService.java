@@ -1,6 +1,8 @@
 package pl.edu.pb.mongodbapplication.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import pl.edu.pb.mongodbapplication.config.error.exception.InvalidDataException;
 import pl.edu.pb.mongodbapplication.config.error.exception.NoFlightsBetweenTheseCitiesOnThisDayException;
@@ -14,17 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@PropertySource("classpath:PL.exception.messages.properties")
 public class FlightService {
 
     private final FlightRepository flightRepository;
 
     private final TicketService ticketService;
 
+    final
+    Environment env;
+
 
     @Autowired
-    public FlightService(FlightRepository flightRepository, TicketService ticketService) {
+    public FlightService(FlightRepository flightRepository, TicketService ticketService, Environment env) {
         this.flightRepository = flightRepository;
         this.ticketService = ticketService;
+        this.env = env;
     }
 
     public List<Flight> findAllFlights(){
@@ -34,7 +41,7 @@ public class FlightService {
     public List<Flight> findAllFlightsByDate(LocalDate localDate){
         List<Flight> flights = flightRepository.findFlightByDate(localDate);
         if(flights.isEmpty()){
-            throw new NoFlightsOnThisDayException("No flights on this day");
+            throw new NoFlightsOnThisDayException(env.getProperty("noFlightsOnThisDay"));
         }
         return flights;
     }
@@ -45,7 +52,7 @@ public class FlightService {
             return flights;
         }
         else{
-            throw new NoFlightsBetweenTheseCitiesOnThisDayException("No flights between:" +
+            throw new NoFlightsBetweenTheseCitiesOnThisDayException(env.getProperty("noFlightsBetween") +": " +
                     countryFrom +
                     ", " +
                     cityFrom +
@@ -66,7 +73,7 @@ public class FlightService {
         booleanList.add(airPortIsValid(airPortTo));
         Boolean resultValid = booleanList.contains(Boolean.TRUE);
         if(resultValid){
-            throw new InvalidDataException("All fields are required");
+            throw new InvalidDataException(env.getProperty("allFieldsAreRequired"));
         }
         return flightRepository.save(flight);
     }

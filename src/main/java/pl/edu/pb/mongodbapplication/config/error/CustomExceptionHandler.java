@@ -64,7 +64,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception) {
         List<String> details = new ArrayList<>();
-        details.add(exception.getLocalizedMessage());
+//        details.add(exception.getLocalizedMessage());
+        details.add("Złe hasło lub nazwa użytkownika. Spróbuj ponownie lub kliknij opcję Przypomnij hasło, aby zresetować hasło");
         AuthenticationResponse error = new AuthenticationResponse(loginFailed, details, HttpStatus.UNAUTHORIZED.value());
         return new ResponseEntity(error, HttpStatus.UNAUTHORIZED);
     }

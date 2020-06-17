@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +42,7 @@ import pl.edu.pb.mongodbapplication.service.UserService;
 @RestController
 @Validated
 @RequestMapping("/api/auth")
+@PropertySource("classpath:PL.exception.messages.properties")
 public class AuthController {
     final
     AuthenticationManager authenticationManager;
@@ -57,13 +62,17 @@ public class AuthController {
     final
     UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, UserService userService) {
+    final
+    Environment env;
+
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, UserService userService, Environment env) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
         this.userService = userService;
+        this.env = env;
     }
 
     @PostMapping("/signin")
@@ -89,11 +98,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
-            throw new UsernameIsAlreadyTakenException("Username is already taken");
+            throw new UsernameIsAlreadyTakenException(env.getProperty("usernameIsAlreadyTaken"));
         }
 
         if (userService.existsByEmail(signUpRequest.getEmail())) {
-            throw new UsernameIsAlreadyTakenException("Email is already taken");
+            throw new UsernameIsAlreadyTakenException(env.getProperty("emailIsAlreadyTaken"));
         }
 
         Set<Roles> roles = new HashSet<>();
@@ -110,7 +119,7 @@ public class AuthController {
                 roles);
 
         if(user.getPassword() == null || user.getPassword().isEmpty()){
-            throw new ThePasswordCanNotBeEmptyException("The password can not be empty");
+            throw new ThePasswordCanNotBeEmptyException(env.getProperty("passwordCanNotBeEmpty"));
         }
 
         user.setPassword(encoder.encode(user.getPassword()));
