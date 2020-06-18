@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface ValidEmail {
 
-    String message() default "Incorrect email format, example:  xyz@xyz.xyz";
+    String message() default "Niepoprawny format emaila, przyklad:  xyz@xyz.xyz";
 
     Class<?>[] groups() default {};
 

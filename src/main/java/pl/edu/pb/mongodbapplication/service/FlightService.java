@@ -102,12 +102,19 @@ public class FlightService {
     }
 
     public Flight editFlight(Flight flight, String flightId){
+        List<Boolean> booleanList = new ArrayList<>();
+        booleanList.add(airPortIsValid(flight.getAirPortFrom()));
+        booleanList.add(airPortIsValid(flight.getAirPortTo()));
         Flight flightResult = flightRepository.findById(flightId).get();
         flightResult.setAirPortTo(flight.getAirPortTo());
         flightResult.setAirPortFrom(flight.getAirPortFrom());
         flightResult.setPrice(flight.getPrice());
         flightResult.setTime(flight.getTime());
         flightResult.setDate(flight.getDate());
+        Boolean resultValid = booleanList.contains(Boolean.TRUE);
+        if(resultValid){
+            throw new InvalidDataException(env.getProperty("allFieldsAreRequired"));
+        }
         return flightRepository.save(flightResult);
     }
 }

@@ -90,7 +90,7 @@ public class TicketService {
     public List<TicketDTOForTicketsListByUser> findAllTicketsByUser(String username){
         Optional<User> user = userRepository.findByUsername(username);
         if(!user.isPresent()){
-            throw new UserNotFoundException(env.getProperty("reservationWithGivenTicketCodeNotFound") + " " + username);
+            throw new UserNotFoundException(env.getProperty("userWithUsernameNotFound") + " " + username);
         }
         List<Ticket> tickets = ticketRepository.findAllByUser(user.get());
         return getTicketsDTOByUser(tickets);
