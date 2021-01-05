@@ -12,6 +12,7 @@ import java.util.List;
 
 
 @SpringBootApplication
+@EnableSwagger2
 public class MongodbapplicationApplication {
 
     public static void main(String[] args) {
