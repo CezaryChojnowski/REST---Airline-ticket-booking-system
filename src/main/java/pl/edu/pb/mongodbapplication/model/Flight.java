@@ -28,4 +28,12 @@ public class Flight{
     private AirPort airPortTo;
     @NotNull
     private int price;
+
+    public Flight(@NotNull(message = "{flight.date}") LocalDate date, @NotNull(message = "{flight.time}") LocalTime time, @NotNull(message = "{flight.airPorts}") AirPort airPortFrom, @NotNull(message = "{flight.airPorts}") AirPort airPortTo, @NotNull int price) {
+        this.date = date;
+        this.time = time;
+        this.airPortFrom = airPortFrom;
+        this.airPortTo = airPortTo;
+        this.price = price;
+    }
 }

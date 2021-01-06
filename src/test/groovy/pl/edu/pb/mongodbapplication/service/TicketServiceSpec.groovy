@@ -16,8 +16,8 @@ import pl.edu.pb.mongodbapplication.model.User
 import pl.edu.pb.mongodbapplication.repository.FlightRepository
 import pl.edu.pb.mongodbapplication.repository.TicketRepository
 import pl.edu.pb.mongodbapplication.repository.UserRepository
-import org.springframework.core.env.Environment;
-
+import org.springframework.core.env.Environment
+import pl.edu.pb.mongodbapplication.typesOfTests.UnitTest;
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -64,8 +64,8 @@ class TicketServiceSpec extends Specification {
         def flight = new Flight(date, time, airPortFrom, airPortTo, price)
         def ticket = new Ticket(flight, user, ticketCode)
         def optionalTicket = Optional.of(ticket);
-        and:
-        ticketRepository.findTicketByCode(_ as Integer) >> optionalTicket
+        and: "The findTicketByCode method will always return ticket when called with given ticket code"
+        ticketRepository.findTicketByCode(ticketCode) >> optionalTicket
         when: "Try get ticket by number of reservation"
         Ticket ticket1 = ticketService.checkReservation(ticketCode);
         then:
@@ -75,87 +75,90 @@ class TicketServiceSpec extends Specification {
     def "Should thrown ReservationNotFoundException"() {
         given: "Defined data to call method"
         Optional<Ticket> optionalTicket = Optional.empty()
-        and:
-        ticketRepository.findTicketByCode(_ as Integer) >> optionalTicket
+        and: "The findTicketByCode method will always return ticket when called with given ticket code"
+        ticketRepository.findTicketByCode(ticketCode) >> optionalTicket
         when: "Try get ticket by number of reservation"
         ticketService.checkReservation(ticketCode);
-        then:
+        then:"Thrown ReservationNotFoundException"
         thrown(ReservationNotFoundException)
     }
 
-    def "Should throw UserNoFoundException"(){
+    def "Should throw UserNoFoundException"() {
         given: "Defined data to call method"
         def userName = "username"
-        when:
+        when:"Try find all tickets by user"
         ticketService.findAllTicketsByUser(userName)
-        then:
+        then:"Thrown UserNotFoundException"
         thrown(UserNotFoundException)
     }
 
-    def "Should return list of tickets"(){
-        given:"Defined data to call method"
+    def "Should return list of tickets"() {
+        given: "Defined data to call method"
         def flight = new Flight(date, time, airPortFrom, airPortTo, price)
         Ticket ticket = new Ticket(flight, user, ticketCode)
         List<Ticket> tickets = Arrays.asList(ticket)
         Optional<User> optionalUser = Optional.of(user)
         List<TicketDTOForTicketsListByUser> ticketsDTO = Arrays.asList(new TicketDTOForTicketsListByUser(ticket.get_id(), ticket.getFlight(), ticket.getCode()))
-        and:
-        userRepository.findByUsername(_ as String) >> optionalUser
-        ticketRepository.findAllByUser(_ as User) >> tickets
-        ticketService.getTicketsDTOByUser(_ as List<Ticket>) >> ticketsDTO
-        when:
+        and: "The findByUsername method will always return optional user when called with given username" +
+                "The findAllByUser method will always return tickets when called with given user" +
+                "The getTicketsDTOByUser method will always return ticketsDTO called with given tickets list"
+        userRepository.findByUsername(userName) >> optionalUser
+        ticketRepository.findAllByUser(user) >> tickets
+        ticketService.getTicketsDTOByUser(tickets) >> ticketsDTO
+        when:"Try call findAllTicketsByUser method with given username"
         List<TicketDTOForTicketsListByUser> result = ticketService.findAllTicketsByUser(userName)
         then:
         result.equals(ticketsDTO)
     }
 
-    def "Should thrown TicketNotFoundException"(){
-        given:"Defined data to call method"
+    def "Should thrown TicketNotFoundException"() {
+        given: "Defined data to call method"
         Optional<Ticket> ticket = Optional.empty()
-        and:
+        and: "The findById method will always return ticket when called with given ticket id"
         ticketRepository.findById(ticketId) >> ticket
-        when:
+        when:"Try call getTicketById method with given ticket id"
         ticketService.getTicketById(ticketId)
-        then:
+        then:"Thrown TicketNotFoundException"
         thrown(TicketNotFoundException)
     }
 
-    def "Should return ticket by ticket id"(){
-        given:"Defined data to call method"
+    def "Should return ticket by ticket id"() {
+        given: "Defined data to call method"
         def flight = new Flight(date, time, airPortFrom, airPortTo, price)
         Ticket ticket = new Ticket(flight, user, ticketCode)
         Optional<Ticket> optionalTicket = Optional.of(ticket)
-        and:
-        ticketRepository.findById(_ as String) >> optionalTicket
-        when:
+        and: "The findById method will always return ticket when called with given ticket id"
+        ticketRepository.findById(ticketId) >> optionalTicket
+        when:"Try call getTicketById method with given ticket id"
         Ticket result = ticketService.getTicketById(ticketId)
         then:
         result.equals(ticket)
     }
 
-    def "Should thrown FlightNotFoundException"(){
-        given:"Defined data to call method"
+    def "Should thrown FlightNotFoundException"() {
+        given: "Defined data to call method"
         Optional<Flight> optionalFlight = Optional.empty()
-        and:
-        flightRepository.findById(_ as String) >> optionalFlight
-        when:
+        and: "The findById method will always return flight when called with given flight id"
+        flightRepository.findById(flightId) >> optionalFlight
+        when:"Try call checkIfThereAreTicketsForTheGivenFlight method with given flight id"
         ticketService.checkIfThereAreTicketsForTheGivenFlight(flightId)
-        then:
+        then:"Thrown FlightNotFoundException"
         thrown(FlightNotFoundException)
     }
 
-    def "Should thrown ThereAreTicketsForTheGivenFlightException"(){
-        given:"Defined data to call method"
+    def "Should thrown ThereAreTicketsForTheGivenFlightException"() {
+        given: "Defined data to call method"
         def flight = new Flight(date, time, airPortFrom, airPortTo, price)
         Ticket ticket = new Ticket(flight, user, ticketCode)
         List<Ticket> tickets = Arrays.asList(ticket)
         Optional<Flight> optionalFlight = Optional.of(flight)
-        and:
-        flightRepository.findById(_ as String) >> optionalFlight
-        ticketRepository.findAllByFlight(_ as Flight) >> tickets
-        when:
+        and: "The findById method will always return optional flight when called with given flight id" +
+                "The findAllByFlight method will always return tickets when called with given flight"
+        flightRepository.findById(flightId) >> optionalFlight
+        ticketRepository.findAllByFlight(flight) >> tickets
+        when:"Try call checkIfThereAreTicketsForTheGivenFlight method with given flight id"
         ticketService.checkIfThereAreTicketsForTheGivenFlight(flightId)
-        then:
+        then:"Thrown ThereAreTicketsForTheGivenFlightException"
         thrown(ThereAreTicketsForTheGivenFlightException)
     }
 }
