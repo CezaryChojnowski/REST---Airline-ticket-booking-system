@@ -33,8 +33,8 @@ public class GenerateService {
         airPorts.add(new AirPort("Rosja", "Moskwa", "Moskwa-Domodiedowo"));
         airPorts.add(new AirPort("Zjednoczone Emiraty Arabskie", "Dubaj ", "Port lotniczy Dubaj "));
 
-        LocalDate date = LocalDate.parse("2020-12-20", DateTimeFormatter.ISO_DATE);
-        LocalDate dateLimit = LocalDate.parse("2020-12-31", DateTimeFormatter.ISO_DATE);
+        LocalDate date = LocalDate.parse("2021-01-11", DateTimeFormatter.ISO_DATE);
+        LocalDate dateLimit = LocalDate.parse("2021-01-31", DateTimeFormatter.ISO_DATE);
         LocalTime time = LocalTime.parse("09:00", DateTimeFormatter.ISO_TIME);
         LocalTime timeLimit = LocalTime.parse("21:00", DateTimeFormatter.ISO_TIME);
         int lenght = airPorts.size();
