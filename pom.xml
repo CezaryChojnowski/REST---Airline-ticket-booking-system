@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
-            <version>3.1.2</version>
+            <version>3.0.6.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -155,6 +155,10 @@
             <artifactId>javax.transaction-api</artifactId>
             <version>1.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
     </dependencies>
 
 
@@ -186,6 +190,25 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--  optional  -->
+                    <javadocExecutable>C:\Program Files\Java\jdk1.8.0_251\bin\javadoc</javadocExecutable>
+                    <!-- to show the private methods in the javadoc -->
+                    <show>private</show>
                 </configuration>
             </plugin>
         </plugins>
