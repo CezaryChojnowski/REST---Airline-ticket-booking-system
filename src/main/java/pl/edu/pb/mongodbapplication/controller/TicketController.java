@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.pb.mongodbapplication.DTO.TicketDTO;
 import pl.edu.pb.mongodbapplication.DTO.TicketDTOForTicketsListByUser;
 import pl.edu.pb.mongodbapplication.config.error.exception.DoNotHaveAccessToThisTicketException;
+import pl.edu.pb.mongodbapplication.log.LogExecutionInfo;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.model.Ticket;
 import pl.edu.pb.mongodbapplication.payload.response.MessageResponse;
@@ -41,6 +42,7 @@ public class TicketController {
         this.env = env;
     }
 
+    @LogExecutionInfo
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.POST)
     public TicketDTO bookingFlight(@Valid @RequestBody Flight flight) throws MessagingException, IOException {
@@ -51,6 +53,7 @@ public class TicketController {
         return ticketDTO;
     }
 
+    @LogExecutionInfo
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public List<TicketDTOForTicketsListByUser> getAllTicketsByUserName(
@@ -59,6 +62,7 @@ public class TicketController {
                 return ticketsListByUsers;
     }
 
+    @LogExecutionInfo
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/reservation/{code}",method = RequestMethod.GET)
     public TicketDTO checkReservation(
@@ -73,12 +77,15 @@ public class TicketController {
         return ticketService.getCreatedTicketDTO(ticket);
     }
 
+    @LogExecutionInfo
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteTicket(@PathVariable("ticketId") String ticketId){
         ticketService.deleteTicket(ticketId);
         return ResponseEntity.ok(new MessageResponse("Ticket deleting successfully!"));
     }
+
+    @LogExecutionInfo
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
     public TicketDTO getTicket(@PathVariable("ticketId") String ticketId){

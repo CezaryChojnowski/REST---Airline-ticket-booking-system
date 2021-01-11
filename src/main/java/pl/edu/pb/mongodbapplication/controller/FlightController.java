@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pb.mongodbapplication.log.LogExecutionInfo;
 import pl.edu.pb.mongodbapplication.model.Flight;
 import pl.edu.pb.mongodbapplication.payload.response.MessageResponse;
 import pl.edu.pb.mongodbapplication.service.CountryService;
@@ -41,6 +42,7 @@ public class FlightController {
         return flights;
     }
 
+    @LogExecutionInfo
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity createFlight(@Valid @RequestBody Flight flight){
@@ -60,6 +62,7 @@ public class FlightController {
         return flightService.findFlightsByGivenTwoCountriesAndCitiesAndDate(countryFrom, cityFrom, countryTo, cityTo, localDate);
     }
 
+    @LogExecutionInfo
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{flightId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteFlight(@PathVariable("flightId") String flightId){
@@ -73,6 +76,7 @@ public class FlightController {
         return flightService.getFlightById(flightId);
     }
 
+    @LogExecutionInfo
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/list" ,method = RequestMethod.POST)
     public ResponseEntity createFlights(@Valid @RequestBody List<Flight> flights){
@@ -89,6 +93,7 @@ public class FlightController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @LogExecutionInfo
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{flightId}", method = RequestMethod.POST)
     public ResponseEntity editFlight(@PathVariable("flightId") String flightId,
